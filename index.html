@@ -61,7 +61,7 @@ const fechaFinDefault    = ultimoDia.toISOString().split("T")[0];
 // ------------------------------
 async function fetchPacientesPorAlta(fechaInicioInput, fechaFinInput) {
     try {
-        const res = await fetch(`http://127.0.0.1:8000/senso/filtrar/?fecha_inicio=${fechaInicioInput}&fecha_fin=${fechaFinInput}`);
+        const res = await fetch(`https://backendsenso.onrender.com/senso/filtrar/?fecha_inicio=${fechaInicioInput}&fecha_fin=${fechaFinInput}`);
         if (!res.ok) throw new Error("No se pudo obtener los datos");
         const pacientes = await res.json();
 
