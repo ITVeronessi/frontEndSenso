@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Médicos - Centro Médico Veronessi</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-white text-xl font-bold">📊 Dashboard Senso</div>
+      <ul id="navbarLinks" class="flex space-x-4">
+        <li><a href="home.html" class="text-white hover:text-gray-200">Inicio</a></li>
+      </ul>
+      <button id="logoutBtn" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-200">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <div class="flex-1 w-full px-6 py-8">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full h-full border-t-4 border-blue-600">
+      <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Gestión de Médicos</h2>
+
+      <!-- Crear Especialidad -->
+      <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-2">Agregar Especialidad</h3>
+          <form id="formEspecialidad" class="flex flex-col md:flex-row gap-2">
+              <input type="text" id="nombreEspecialidad" placeholder="Nombre de la especialidad" 
+                     class="flex-1 border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+              <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mt-2 md:mt-0">Agregar</button>
+          </form>
+          <div id="mensajeEspecialidad" class="mt-2 text-center"></div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Crear Medico -->
+      <div>
+          <h3 class="text-xl font-semibold mb-2">Agregar Médico</h3>
+          <form id="formMedico" class="space-y-4">
+              <div>
+                  <label class="block mb-1">Nombre del Médico</label>
+                  <input type="text" id="nombreMedico" required
+                      class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                  <label class="block mb-1">Especialidad</label>
+                  <select id="selectEspecialidad" required
+                      class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Seleccione una especialidad</option>
+                  </select>
+              </div>
+              <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Guardar Médico</button>
+          </form>
+          <div id="mensajeMedico" class="mt-2 text-center"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API_BASE = "https://backendsenso.onrender.com";
+
+// ----------------------
+// Cargar especialidades en el select
+// ----------------------
+async function cargarEspecialidades() {
+    const select = document.getElementById("selectEspecialidad");
+    select.innerHTML = '<option value="">Seleccione una especialidad</option>';
+    try {
+        const res = await fetch(`${API_BASE}/especialidades/`);
+        if(!res.ok) throw new Error("Error al cargar especialidades");
+        const data = await res.json();
+        data.forEach(e => {
+            const option = document.createElement("option");
+            option.value = e.id_especialidad;
+            option.textContent = e.nombre;
+            select.appendChild(option);
+        });
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+// ----------------------
+// Crear especialidad
+// ----------------------
+document.getElementById("formEspecialidad").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const nombre = document.getElementById("nombreEspecialidad").value.trim();
+    const mensaje = document.getElementById("mensajeEspecialidad");
+    if(!nombre) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/especialidades/`, {
+            method:"POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({nombre})
+        });
+        if(!res.ok) throw new Error("No se pudo crear la especialidad");
+        mensaje.textContent = "✅ Especialidad creada";
+        mensaje.className = "text-green-600 text-center";
+        document.getElementById("nombreEspecialidad").value = "";
+        cargarEspecialidades(); // refresca select
+    } catch(err) {
+        console.error(err);
+        mensaje.textContent = "❌ Error al crear especialidad";
+        mensaje.className = "text-red-600 text-center";
+    }
+});
+
+// ----------------------
+// Crear medico
+// ----------------------
+document.getElementById("formMedico").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const nombre = document.getElementById("nombreMedico").value.trim();
+    const id_especialidad_fk = document.getElementById("selectEspecialidad").value;
+    const mensaje = document.getElementById("mensajeMedico");
+
+    if(!nombre || !id_especialidad_fk){
+        mensaje.textContent = "⚠️ Completa todos los campos";
+        mensaje.className = "text-yellow-600 text-center";
+        return;
+    }
+
+    try{
+        const res = await fetch(`${API_BASE}/medicos/`, {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({nombre, id_especialidad_fk: parseInt(id_especialidad_fk)})
+        });
+        if(!res.ok) throw new Error("No se pudo crear el médico");
+        mensaje.textContent = "✅ Médico agregado correctamente";
+        mensaje.className = "text-green-600 text-center";
+        document.getElementById("formMedico").reset();
+    } catch(err){
+        console.error(err);
+        mensaje.textContent = "❌ Error al agregar médico";
+        mensaje.className = "text-red-600 text-center";
+    }
+});
+
+// ----------------------
+// Inicializar
+// ----------------------
+document.addEventListener("DOMContentLoaded", cargarEspecialidades);
+</script>
+</body>
+</html>

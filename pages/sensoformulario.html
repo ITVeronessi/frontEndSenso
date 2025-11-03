@@ -1,17 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cargar Nuevo Senso</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Senso</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 min-h-screen">
+     <nav class="bg-blue-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-xl font-bold">Senso</div>
+            <ul class="flex space-x-4">
+                <li><a href="../index.html" class="text-white hover:text-gray-200">Inicio</a></li>
+                
+            </ul>
+        </div>
+    </nav>
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-8 text-center">Gestión de Senso</h1>
 
-  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-    <h2 class="text-2xl font-bold mb-6 text-center">Cargar Nuevo Senso</h2>
+    <!-- Navegación -->
+    <div class="flex justify-center mb-6">
+        <button id="btn-buscar" class="bg-blue-500 text-white px-4 py-2 rounded-l-md hover:bg-blue-600">Buscar</button>
+        <button id="btn-cargar" class="bg-green-500 text-white px-4 py-2 rounded-r-md hover:bg-green-600">Cargar</button>
+    </div>
 
-    <form id="sensoForm" class="space-y-4">
+    <!-- Sección Buscar -->
+    <div id="seccion-buscar" class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-bold mb-4">Buscar Senso</h2>
+        <form id="form-buscar" class="space-y-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" id="buscar-nombre" class="input-field" placeholder="Ej: Ana">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                    <input type="text" id="buscar-apellido" class="input-field" placeholder="Ej: Pérez">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Desde</label>
+                    <input type="date" id="fecha-desde" class="input-field">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Hasta</label>
+                    <input type="date" id="fecha-hasta" class="input-field">
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Resultados -->
+        <div id="resultados" class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Apellido</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Edad</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Género</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Ingreso</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Diagnóstico</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Especialidad</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Aseguradora</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Alta</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Alta</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-resultados" class="bg-white divide-y divide-gray-200">
+                    <tr><td colspan="11" class="px-4 py-2 text-center text-gray-500">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Sección Cargar -->
+    <div id="seccion-cargar" class="bg-white p-6 rounded-lg shadow-md hidden">
+        <h2 class="text-2xl font-bold mb-4">Cargar Nuevo Senso</h2>
+           <form id="sensoForm" class="space-y-4">
       <!-- ID Paciente -->
       <div>
         <label>ID Paciente</label>
@@ -90,10 +159,130 @@
         <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Guardar</button>
       </div>
     </form>
-  </div>
+    </div>
+</div>
 
 <script>
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://backendsenso.onrender.com";
+let sensoData = [];
+
+// Alternar secciones
+const seccionBuscar = document.getElementById("seccion-buscar");
+const seccionCargar = document.getElementById("seccion-cargar");
+document.getElementById("btn-buscar").addEventListener("click", () => {
+  seccionBuscar.classList.remove("hidden");
+  seccionCargar.classList.add("hidden");
+});
+document.getElementById("btn-cargar").addEventListener("click", () => {
+  seccionCargar.classList.remove("hidden");
+  seccionBuscar.classList.add("hidden");
+});
+
+// Fecha actual por defecto
+function setFechasHoy() {
+  const hoy = new Date().toISOString().split("T")[0];
+  document.getElementById("fecha-desde").value = hoy;
+  document.getElementById("fecha-hasta").value = hoy;
+}
+setFechasHoy();
+
+// Cargar datos
+async function cargarSenso() {
+  try {
+    const res = await fetch(`${API_BASE}/senso/`);
+    sensoData = await res.json();
+    mostrarResultados(sensoData);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Mostrar resultados
+function mostrarResultados(data) {
+  const tbody = document.getElementById("tbody-resultados");
+  tbody.innerHTML = "";
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="11" class="px-4 py-2 text-center text-gray-500">Sin resultados</td></tr>`;
+    return;
+  }
+  data.forEach(s => {
+    tbody.innerHTML += `
+      <tr>
+        <td class="px-4 py-2">${s.idsenso}</td>
+        <td class="px-4 py-2">${s.nombrepaciente}</td>
+        <td class="px-4 py-2">${s.apellidopaciente}</td>
+        <td class="px-4 py-2">${s.edad}</td>
+        <td class="px-4 py-2">${s.genero?.nombre || ""}</td>
+        <td class="px-4 py-2">${s.fechaingreso}</td>
+        <td class="px-4 py-2">${s.diagnosticopaciente}</td>
+        <td class="px-4 py-2">${s.especialidad}</td>
+        <td class="px-4 py-2">${s.aseguradora}</td>
+        <td class="px-4 py-2">${s.fechaalta || ""}</td>
+        <td class="px-4 py-2 text-center">
+          <input 
+            type="checkbox" 
+            onchange="darDeAlta(${s.idsenso}, this)" 
+            ${s.fechaalta ? "checked disabled" : ""} 
+            class="cursor-pointer"
+          >
+        </td>
+      </tr>`;
+  });
+}
+
+// Filtro de búsqueda
+document.getElementById("form-buscar").addEventListener("submit", e => {
+  e.preventDefault();
+  const nombre = document.getElementById("buscar-nombre").value.toLowerCase();
+  const apellido = document.getElementById("buscar-apellido").value.toLowerCase();
+  const desde = new Date(document.getElementById("fecha-desde").value);
+  const hasta = new Date(document.getElementById("fecha-hasta").value);
+
+  const filtrados = sensoData.filter(s => {
+    const fechaIngreso = new Date(s.fechaingreso);
+    return (
+      (!nombre || s.nombrepaciente.toLowerCase().includes(nombre)) &&
+      (!apellido || s.apellidopaciente.toLowerCase().includes(apellido)) &&
+      fechaIngreso >= desde && fechaIngreso <= hasta
+    );
+  });
+  mostrarResultados(filtrados);
+});
+
+// Dar de alta paciente
+async function darDeAlta(idsenso, checkbox) {
+    if(!confirm("¿Dar de alta al paciente?")) {
+        checkbox.checked = false;
+        return;
+    }
+
+    // Fecha y hora actual en formato ISO (YYYY-MM-DDTHH:MM:SS)
+    const fechaAlta = new Date().toISOString();
+
+    try {
+        const res = await fetch(`${API_BASE}/senso/${idsenso}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ fechaalta: fechaAlta })
+        });
+
+        if (!res.ok) throw new Error("No se pudo actualizar");
+
+        alert("✅ Paciente dado de alta");
+        checkbox.disabled = true;       // bloquea checkbox
+        cargarSenso();                  // refresca tabla automáticamente
+    } catch(err) {
+        console.error(err);
+        alert("⚠️ Error al actualizar fecha de alta");
+        checkbox.checked = false;       // revertir checkbox
+    }
+}
+
+
+// Inicializar
+cargarSenso();
+//post
+
 let medicosData = [];
 
 // Cargar géneros
@@ -167,5 +356,15 @@ cargarGeneros();
 cargarMedicos();
 </script>
 
+<style>
+.input-field {
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.05);
+}
+</style>
 </body>
 </html>

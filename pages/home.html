@@ -1,0 +1,196 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senso Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-white text-xl font-bold">📊 Dashboard Senso</div>
+      <ul id="navbarLinks" class="flex space-x-4">
+        <li><a href="#" class="text-white hover:text-gray-200">Inicio</a></li>
+        <!-- 👇 Este enlace de Panel se agregará dinámicamente solo si el rol lo permite -->
+      </ul>
+      <button id="logoutBtn" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-200">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <div class="container mx-auto p-6">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">📈 Estadísticas de Pacientes</h1>
+      <p class="text-gray-600 mt-2">Filtra por rango de fechas y observa los ingresos.</p>
+      <p id="welcomeText" class="text-gray-700 mt-2 font-semibold"></p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex flex-wrap justify-center gap-4 mb-6">
+      <input type="date" id="fechaInicio" class="border px-3 py-2 rounded" />
+      <input type="date" id="fechaFin" class="border px-3 py-2 rounded" />
+      <button onclick="filtrar()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Filtrar
+      </button>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-gray-700">Pacientes dados de alta</h2>
+      <canvas id="chartIngresos"></canvas>
+    </div>
+
+    <!-- Mensaje -->
+    <div id="mensaje" class="text-center text-gray-600 mt-4"></div>
+  </div>
+
+<script>
+// ------------------------------
+// 🔒 Control de sesión y roles
+// ------------------------------
+const user = JSON.parse(localStorage.getItem("user"));
+
+// Si no hay usuario guardado, redirige al login
+if (!user) {
+  window.location.href = "login.html";
+} else {
+  // Mostrar mensaje de bienvenida
+  document.getElementById("welcomeText").textContent = 
+    `Bienvenido, ${user.username} (${user.role})`;
+
+  // Agregar el link de "Panel" solo si es admin o caja
+  if (user.role === "Administrador" || user.role === "Empleado") {
+    const navbar = document.getElementById("navbarLinks");
+
+    // Primer link
+    let li1 = document.createElement("li");
+    li1.innerHTML = `<a href="Sensoformulario.html" class="text-white hover:text-gray-200">Panel</a>`;
+    navbar.appendChild(li1);
+
+    // Segundo link
+    let li2 = document.createElement("li");
+    li2.innerHTML = `<a href="Doctores.html" class="text-white hover:text-gray-200">Crear Doctor</a>`;
+    navbar.appendChild(li2);
+}
+if (user.role === "Invitado") {
+    const navbar = document.getElementById("navbarLinks");
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="busqueda.html" class="text-white hover:text-gray-200">Lista</a>`;
+    navbar.appendChild(li);
+  }
+
+}
+
+// Botón de cerrar sesión
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "../index.html";
+});
+
+// ------------------------------
+// Configuración de fechas iniciales (mes actual)
+// ------------------------------
+const hoy = new Date();
+const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+const ultimoDia  = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
+
+const fechaInicioDefault = primerDia.toISOString().split("T")[0];
+const fechaFinDefault    = ultimoDia.toISOString().split("T")[0];
+
+// ------------------------------
+// Traer datos del backend
+// ------------------------------
+async function fetchPacientesPorAlta(fechaInicioInput, fechaFinInput) {
+    try {
+        const res = await fetch(`https://backendsenso.onrender.com/senso/filtrar/?fecha_inicio=${fechaInicioInput}&fecha_fin=${fechaFinInput}`);
+        if (!res.ok) throw new Error("No se pudo obtener los datos");
+        const pacientes = await res.json();
+
+        const conteoPorDia = {};
+        pacientes.forEach(p => {
+            if (p.fechaalta) {
+                const fecha = p.fechaalta.split("T")[0];
+                if (!conteoPorDia[fecha]) conteoPorDia[fecha] = 0;
+                conteoPorDia[fecha] += 1;
+            }
+        });
+        return conteoPorDia;
+
+    } catch (err) {
+        console.error("Error al traer pacientes:", err);
+        return {};
+    }
+}
+
+// ------------------------------
+// Renderizar gráfico
+// ------------------------------
+let chart;
+async function renderPacientesChart(fechaInicioInput, fechaFinInput) {
+    const datos = await fetchPacientesPorAlta(fechaInicioInput, fechaFinInput);
+
+    const labels = Object.keys(datos).sort();
+    const valores = labels.map(f => datos[f]);
+
+    const ctx = document.getElementById("chartIngresos").getContext("2d");
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: "Pacientes dados de alta",
+                data: valores,
+                fill: false,
+                borderColor: "rgba(54, 162, 235, 1)",
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                tension: 0.2,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true },
+                tooltip: { mode: "index", intersect: false }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: "Cantidad de pacientes" } },
+                x: { title: { display: true, text: "Fecha" } }
+            }
+        }
+    });
+}
+
+// ------------------------------
+// Filtrar por fechas
+// ------------------------------
+async function filtrar() {
+    const inicio = document.getElementById("fechaInicio").value;
+    const fin    = document.getElementById("fechaFin").value;
+
+    if (!inicio || !fin) {
+        alert("Selecciona ambas fechas");
+        return;
+    }
+
+    await renderPacientesChart(inicio, fin);
+}
+
+// ------------------------------
+// Inicializar con mes actual
+// ------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("fechaInicio").value = fechaInicioDefault;
+    document.getElementById("fechaFin").value    = fechaFinDefault;
+    renderPacientesChart(fechaInicioDefault, fechaFinDefault);
+});
+</script>
+
+</body>
+</html>

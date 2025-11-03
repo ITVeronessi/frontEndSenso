@@ -7,176 +7,75 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-     <nav class="bg-blue-600 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-white text-xl font-bold">Senso</div>
-            <ul class="flex space-x-4">
-                <li><a href="../index.html" class="text-white hover:text-gray-200">Inicio</a></li>
-                
-            </ul>
-        </div>
-    </nav>
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-8 text-center">Gestión de Senso</h1>
 
-    <!-- Navegación -->
-    <div class="flex justify-center mb-6">
-        <button id="btn-buscar" class="bg-blue-500 text-white px-4 py-2 rounded-l-md hover:bg-blue-600">Buscar</button>
-        <button id="btn-cargar" class="bg-green-500 text-white px-4 py-2 rounded-r-md hover:bg-green-600">Cargar</button>
+  <!-- Navbar -->
+  <nav class="bg-red-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-white text-xl font-bold">Senso</div>
+      <ul class="flex space-x-4">
+        <li><a href="home.html" class="text-white hover:text-gray-200">Inicio</a></li>
+      </ul>
     </div>
+  </nav>
+
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-8 text-center">Gestión de Senso</h1>
 
     <!-- Sección Buscar -->
     <div id="seccion-buscar" class="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 class="text-2xl font-bold mb-4">Buscar Senso</h2>
-        <form id="form-buscar" class="space-y-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
-                    <input type="text" id="buscar-nombre" class="input-field" placeholder="Ej: Ana">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Apellido</label>
-                    <input type="text" id="buscar-apellido" class="input-field" placeholder="Ej: Pérez">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Desde</label>
-                    <input type="date" id="fecha-desde" class="input-field">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Hasta</label>
-                    <input type="date" id="fecha-hasta" class="input-field">
-                </div>
-            </div>
-            <div class="flex justify-end">
-                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Buscar</button>
-            </div>
-        </form>
-
-        <!-- Resultados -->
-        <div id="resultados" class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Apellido</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Edad</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Género</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Ingreso</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Diagnóstico</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Especialidad</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Aseguradora</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Alta</th>
-                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Alta</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody-resultados" class="bg-white divide-y divide-gray-200">
-                    <tr><td colspan="11" class="px-4 py-2 text-center text-gray-500">Cargando...</td></tr>
-                </tbody>
-            </table>
+      <h2 class="text-2xl font-bold mb-4">Buscar Senso</h2>
+      <form id="form-buscar" class="space-y-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" id="buscar-nombre" class="input-field" placeholder="Ej: Ana">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Apellido</label>
+            <input type="text" id="buscar-apellido" class="input-field" placeholder="Ej: Pérez">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Desde</label>
+            <input type="date" id="fecha-desde" class="input-field">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Hasta</label>
+            <input type="date" id="fecha-hasta" class="input-field">
+          </div>
         </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Buscar</button>
+        </div>
+      </form>
+
+      <!-- Resultados -->
+      <div id="resultados" class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Apellido</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Edad</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Género</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Ingreso</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Diagnóstico</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Especialidad</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Aseguradora</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha Alta</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-resultados" class="bg-white divide-y divide-gray-200">
+            <tr><td colspan="10" class="px-4 py-2 text-center text-gray-500">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <!-- Sección Cargar -->
-    <div id="seccion-cargar" class="bg-white p-6 rounded-lg shadow-md hidden">
-        <h2 class="text-2xl font-bold mb-4">Cargar Nuevo Senso</h2>
-           <form id="sensoForm" class="space-y-4">
-      <!-- ID Paciente -->
-      <div>
-        <label>ID Paciente</label>
-        <input name="id_paciente" required maxlength="25"
-          class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-        <!-- Nombre Paciente  diasInstancia-->
-        <div>
-                <label> Dias De diasInstancia </label>
-                <input name="diasInstancia" type="number" required min="0" max="200"
-                class="mt-1 w-full px-3 py-2 border rounded-md">
-            </div>
-      <!-- Nombre Paciente  -->
-      <div>
-        <label>Nombre Paciente</label>
-        <input name="nombrepaciente" required maxlength="150"
-          class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-
-      <!-- Apellido Paciente -->
-      <div>
-        <label>Apellido Paciente</label>
-        <input name="apellidopaciente" required maxlength="150"
-          class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-
-      <!-- Edad -->
-      <div>
-        <label>Edad</label>
-        <input type="number" name="edad" min="0" required
-          class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-
-      <!-- Género -->
-      <div>
-        <label>Género</label>
-        <select name="idgenero_fk" required class="mt-1 w-full px-3 py-2 border rounded-md">
-          <option value="">Seleccione un género</option>
-        </select>
-      </div>
-
-      <!-- Fecha ingreso -->
-      <div>
-        <label>Fecha Ingreso</label>
-        <input type="date" name="fechaingreso" required class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-
-      <!-- Diagnóstico -->
-      <div>
-        <label>Diagnóstico Paciente</label>
-        <textarea name="diagnosticopaciente" maxlength="250" rows="3" required class="mt-1 w-full px-3 py-2 border rounded-md"></textarea>
-      </div>
-
-      <!-- Médico -->
-      <div>
-        <label>Médico</label>
-        <select name="idmedicos_fk" required class="mt-1 w-full px-3 py-2 border rounded-md">
-          <option value="">Cargando médicos...</option>
-        </select>
-      </div>
-
-      <!-- Especialidad -->
-      <div>
-        <label>Especialidad</label>
-        <input name="especialidad" readonly class="mt-1 w-full px-3 py-2 border rounded-md bg-gray-100">
-      </div>
-
-      <!-- Aseguradora -->
-      <div>
-        <label>Aseguradora</label>
-        <input name="aseguradora" maxlength="150" required class="mt-1 w-full px-3 py-2 border rounded-md">
-      </div>
-
-      <!-- Botón -->
-      <div class="flex justify-end">
-        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Guardar</button>
-      </div>
-    </form>
-    </div>
-</div>
+  </div>
 
 <script>
 const API_BASE = "https://backendsenso.onrender.com";
 let sensoData = [];
-
-// Alternar secciones
-const seccionBuscar = document.getElementById("seccion-buscar");
-const seccionCargar = document.getElementById("seccion-cargar");
-document.getElementById("btn-buscar").addEventListener("click", () => {
-  seccionBuscar.classList.remove("hidden");
-  seccionCargar.classList.add("hidden");
-});
-document.getElementById("btn-cargar").addEventListener("click", () => {
-  seccionCargar.classList.remove("hidden");
-  seccionBuscar.classList.add("hidden");
-});
 
 // Fecha actual por defecto
 function setFechasHoy() {
@@ -186,7 +85,7 @@ function setFechasHoy() {
 }
 setFechasHoy();
 
-// Cargar datos
+// Cargar datos iniciales
 async function cargarSenso() {
   try {
     const res = await fetch(`${API_BASE}/senso/`);
@@ -202,7 +101,7 @@ function mostrarResultados(data) {
   const tbody = document.getElementById("tbody-resultados");
   tbody.innerHTML = "";
   if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="11" class="px-4 py-2 text-center text-gray-500">Sin resultados</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" class="px-4 py-2 text-center text-gray-500">Sin resultados</td></tr>`;
     return;
   }
   data.forEach(s => {
@@ -218,14 +117,6 @@ function mostrarResultados(data) {
         <td class="px-4 py-2">${s.especialidad}</td>
         <td class="px-4 py-2">${s.aseguradora}</td>
         <td class="px-4 py-2">${s.fechaalta || ""}</td>
-        <td class="px-4 py-2 text-center">
-          <input 
-            type="checkbox" 
-            onchange="darDeAlta(${s.idsenso}, this)" 
-            ${s.fechaalta ? "checked disabled" : ""} 
-            class="cursor-pointer"
-          >
-        </td>
       </tr>`;
   });
 }
@@ -249,111 +140,8 @@ document.getElementById("form-buscar").addEventListener("submit", e => {
   mostrarResultados(filtrados);
 });
 
-// Dar de alta paciente
-async function darDeAlta(idsenso, checkbox) {
-    if(!confirm("¿Dar de alta al paciente?")) {
-        checkbox.checked = false;
-        return;
-    }
-
-    // Fecha y hora actual en formato ISO (YYYY-MM-DDTHH:MM:SS)
-    const fechaAlta = new Date().toISOString();
-
-    try {
-        const res = await fetch(`${API_BASE}/senso/${idsenso}`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ fechaalta: fechaAlta })
-        });
-
-        if (!res.ok) throw new Error("No se pudo actualizar");
-
-        alert("✅ Paciente dado de alta");
-        checkbox.disabled = true;       // bloquea checkbox
-        cargarSenso();                  // refresca tabla automáticamente
-    } catch(err) {
-        console.error(err);
-        alert("⚠️ Error al actualizar fecha de alta");
-        checkbox.checked = false;       // revertir checkbox
-    }
-}
-
-
-// Inicializar
+// Inicializar tabla
 cargarSenso();
-//post
-
-let medicosData = [];
-
-// Cargar géneros
-async function cargarGeneros() {
-  const select = document.querySelector('select[name="idgenero_fk"]');
-  try {
-    const res = await fetch(`${API_BASE}/generos/`);
-    const generos = await res.json();
-    generos.forEach(g => {
-      const opt = document.createElement('option');
-      opt.value = g.id_genero;
-      opt.textContent = g.nombre;
-      select.appendChild(opt);
-    });
-  } catch(e) { console.error(e); }
-}
-
-// Cargar médicos
-async function cargarMedicos() {
-  const select = document.querySelector('select[name="idmedicos_fk"]');
-  try {
-    const res = await fetch(`${API_BASE}/medicos/`);
-    medicosData = await res.json();
-    select.innerHTML = '<option value="">Seleccione un médico</option>';
-    medicosData.forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m.id_medico;          // coincide con Pydantic
-      opt.textContent = m.nombre;
-      opt.dataset.especialidad = m.especialidad; // especialidad para JS
-      select.appendChild(opt);
-    });
-  } catch(e) { console.error(e); }
-}
-
-// Actualizar especialidad al seleccionar médico
-document.querySelector('select[name="idmedicos_fk"]').addEventListener('change', function() {
-  const selected = this.selectedOptions[0];
-  const espInput = document.querySelector('input[name="especialidad"]');
-  espInput.value = selected?.dataset?.especialidad || "";
-});
-
-// Enviar formulario
-document.getElementById("sensoForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(this));
-
-  try {
-    const res = await fetch(`${API_BASE}/senso/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    });
-
-    if(res.ok){
-      alert("Senso guardado ✅");
-      this.reset();
-      document.querySelector('input[name="especialidad"]').value = "";
-    } else {
-      const error = await res.json();
-      console.error("Error POST /senso:", error);
-      alert("Error al guardar, revisa consola");
-    }
-  } catch(err){
-    console.error(err);
-    alert("Error de conexión con la API");
-  }
-});
-
-// Inicializar
-cargarGeneros();
-cargarMedicos();
 </script>
 
 <style>
