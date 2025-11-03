@@ -325,6 +325,7 @@ document.querySelector('select[name="idmedicos_fk"]').addEventListener('change',
 });
 
 // Enviar formulario
+/*
 document.getElementById("sensoForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(this));
@@ -350,6 +351,59 @@ document.getElementById("sensoForm").addEventListener("submit", async function(e
     alert("Error de conexión con la API");
   }
 });
+*/
+// Función para transformar los datos del formulario al formato que espera FastAPI
+const transformarData = (data) => {
+  return {
+    id_paciente: data.id_paciente,
+    diasInstancia: parseInt(data.diasInstancia || 0),
+    nombrepaciente: data.nombrepaciente,
+    apellidopaciente: data.apellidopaciente,
+    edad: parseInt(data.edad),
+    idgenero_fk: parseInt(data.idgenero_fk),  // Debes enviar el ID del género (no texto)
+    fechaingreso: data.fechaingreso,
+    diagnosticopaciente: data.diagnosticopaciente,
+    idmedicos_fk: parseInt(data.idmedicos_fk), // ID del médico desde select/input
+    especialidad: data.especialidad,           // Puedes tomarla desde el médico seleccionado
+    aseguradora: data.aseguradora || "Sin aseguradora",
+    fechaalta: data.fechaalta || null
+  };
+};
+
+// Enviar formulario
+document.getElementById("sensoForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  // Capturamos los datos del formulario
+  const formData = Object.fromEntries(new FormData(this));
+  console.log("Formulario original:", formData);
+
+  // Transformamos antes de enviar
+  const payload = transformarData(formData);
+  console.log("Payload enviado al backend:", payload);
+
+  try {
+    const res = await fetch(`${API_BASE}/senso/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok){
+      alert("✅ Senso guardado correctamente");
+      this.reset();
+      document.querySelector('input[name="especialidad"]').value = "";
+    } else {
+      const error = await res.json();
+      console.error("❌ Error POST /senso:", error);
+      alert("⚠ Error al guardar, revisa la consola");
+    }
+  } catch(err){
+    console.error(err);
+    alert("❌ Error de conexión con la API");
+  }
+});
+
 
 // Inicializar
 cargarGeneros();
