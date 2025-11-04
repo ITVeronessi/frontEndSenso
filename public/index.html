@@ -11,7 +11,7 @@
 
         <!-- Sección de imagen y título -->
         <div class="flex flex-col items-center mb-6">
-            <img src="/img/logo.jpg" alt="Logo Centro Médico" class="mb-4 w-32 h-32 object-contain">
+            <img src="img/logo.jpg" alt="Logo Centro Médico" class="mb-4 w-32 h-32 object-contain">
             <h1 class="text-xl font-bold text-center text-red-600">
                 CENSO DE PACIENTES <br> AMBULATORIOS/HOSPITALARIOS
             </h1>
@@ -41,13 +41,6 @@
             { username: "caja", password: "caja#2025", role: "Empleado" }
         ];
 
-        // Mapa de roles a URLs limpias
-        const rolePages = {
-            "Administrador": "/home",
-            "Invitado": "/home",
-            "Empleado": "/home"
-        };
-
         document.getElementById("loginForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
@@ -58,7 +51,6 @@
             const user = users.find(u => u.username === username && u.password === password);
 
             if (user) {
-                // Guardar usuario en localStorage
                 localStorage.setItem("user", JSON.stringify({
                     username: user.username,
                     role: user.role
@@ -67,9 +59,8 @@
                 message.textContent = "Bienvenido, " + user.role;
                 message.className = "mt-4 text-center text-green-500";
 
-                // Redirección a URL limpia
                 setTimeout(() => {
-                    window.location.href = rolePages[user.role];
+                    window.location.href = "pages/home.html";
                 }, 1000);
             } else {
                 message.textContent = "Usuario o contraseña incorrectos.";
