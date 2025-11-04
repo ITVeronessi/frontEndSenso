@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "public": true,
+  "public": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "builds": [
     {
       "src": "public/**/*",
