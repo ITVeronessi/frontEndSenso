@@ -151,12 +151,7 @@ function mostrarResultados(data) {
         <td class="px-4 py-2">${s.aseguradora}</td>
         <td class="px-4 py-2">${s.fechaalta || ""}</td>
         <td class="px-4 py-2 text-center">
-          <input 
-            type="checkbox" 
-            onchange="darDeAlta(${s.idsenso}, this)" 
-            ${s.fechaalta ? "checked disabled" : ""} 
-            class="cursor-pointer"
-          >
+         Acceso denegado
         </td>
         <td class="px-4 py-2 text-center">${diasTranscurridos}</td>
         <td class="px-4 py-2 text-center">
