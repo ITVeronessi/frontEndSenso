@@ -9,7 +9,7 @@
 <body class="bg-gray-100 min-h-screen">
      <nav class="bg-red-600 p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="text-white text-xl font-bold">Senso</div>
+            <div class="text-white text-xl font-bold">Censo</div>
             <ul class="flex space-x-4">
                 <li><a href="./home.html" class="text-white hover:text-gray-200">Inicio</a></li>
                 
@@ -21,8 +21,8 @@
 
     <!-- Navegación -->
     <div class="flex justify-center mb-6">
-        <button id="btn-buscar" class="bg-blue-500 text-white px-4 py-2 rounded-l-md hover:bg-blue-600">Buscar</button>
-        <button id="btn-cargar" class="bg-green-500 text-white px-4 py-2 rounded-r-md hover:bg-green-600">Cargar</button>
+        <button id="btn-buscar" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Buscar</button>
+        <button id="btn-cargar" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Cargar</button>
     </div>
 
     <!-- Sección Buscar -->
@@ -282,8 +282,8 @@ function mostrarResultados(data) {
     let botonesAcciones = "";
     if (rolUsuario === "Administrador") {
       botonesAcciones = `
-        <button onclick="modificarSenso(${s.idsenso})" class="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500">Modificar</button>
-        <button onclick="eliminarSenso(${s.idsenso})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Eliminar</button>
+        <button onclick="modificarSenso(${s.idsenso})" class=" bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500">Modificar</button>
+        <button onclick="eliminarSenso(${s.idsenso})" class="bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600">Eliminar</button>
       `;
     } else if (rolUsuario === "Empleado") {
       botonesAcciones = `

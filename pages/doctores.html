@@ -11,7 +11,7 @@
   <!-- Navbar -->
   <nav class="bg-red-600 p-4">
     <div class="container mx-auto flex justify-between items-center">
-      <div class="text-white text-xl font-bold">📊 Dashboard Senso</div>
+      <div class="text-white text-xl font-bold">📊 Dashboard Censo</div>
       <ul id="navbarLinks" class="flex space-x-4">
         <li><a href="./home.html" class="text-white hover:text-gray-200">Inicio</a></li>
       </ul>
@@ -24,129 +24,369 @@
     <div class="bg-white p-8 rounded-lg shadow-md w-full h-full border-t-4 border-blue-600">
       <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Gestión de Médicos</h2>
 
-      <!-- Crear Especialidad -->
-      <div class="mb-6">
-          <h3 class="text-xl font-semibold mb-2">Agregar Especialidad</h3>
-          <form id="formEspecialidad" class="flex flex-col md:flex-row gap-2">
-              <input type="text" id="nombreEspecialidad" placeholder="Nombre de la especialidad" 
-                     class="flex-1 border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-              <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mt-2 md:mt-0">Agregar</button>
-          </form>
-          <div id="mensajeEspecialidad" class="mt-2 text-center"></div>
-      </div>
+     <!-- Botón para abrir modal de agregar especialidad -->
+<div class="mb-6">
+  <button onclick="abrirModal('modalAgregarEspecialidad')" 
+          class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"> Agregar Especialidad
+  </button>
+</div>
+<!-- Botón para abrir modal de agregar médico -->
+<div class="mb-6">
+  <button onclick="abrirModal('modalAgregarMedico')" 
+           class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"> Agregar Médico
+  </button>
+</div>
 
-      <hr class="my-4">
 
-      <!-- Crear Medico -->
+<!-- Lista de Médicos -->
+<div>
+    <!-- Filtro de búsqueda -->
+<div class="mb-4">
+  <input type="text" id="filtroMedicos" placeholder="Buscar médico o especialidad..."
+         class="w-full md:w-1/2 border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+</div>
+
+  <h3 class="text-xl font-semibold mb-2">Lista de Médicos</h3>
+
+  <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-md">
+    <thead class="bg-red-600 text-white">
+      <tr>
+        <th class="py-2 px-4 text-left">ID</th>
+        <th class="py-2 px-4 text-left">Nombre</th>
+        <th class="py-2 px-4 text-left">Especialidad</th>
+        <th class="py-2 px-4 text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyMedicos">
+      <!-- Se cargará dinámicamente con JS -->
+    </tbody>
+  </table>
+</div>
+
+  <!-- MODALES -->
+
+  <!-- Modal Agregar Médico -->
+<!-- Modal Agregar Médico -->
+<div id="modalAgregarMedico" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h3 class="text-xl font-bold mb-4">Agregar Médico</h3>
+    <form id="formMedico" class="space-y-4">
       <div>
-          <h3 class="text-xl font-semibold mb-2">Agregar Médico</h3>
-          <form id="formMedico" class="space-y-4">
-              <div>
-                  <label class="block mb-1">Nombre del Médico</label>
-                  <input type="text" id="nombreMedico" required
-                      class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              </div>
-              <div>
-                  <label class="block mb-1">Especialidad</label>
-                  <select id="selectEspecialidad" required
-                      class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option value="">Seleccione una especialidad</option>
-                  </select>
-              </div>
-              <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Guardar Médico</button>
-          </form>
-          <div id="mensajeMedico" class="mt-2 text-center"></div>
+        <label class="block mb-1">Nombre del Médico</label>
+        <input type="text" id="nombreMedico" required
+               class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Ingrese nombre completo">
       </div>
+      <div>
+        <label class="block mb-1">Especialidad</label>
+        <select id="selectEspecialidad" required
+                class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">Seleccione una especialidad</option>
+        </select>
+      </div>
+      <div class="flex justify-end space-x-2 mt-4">
+        <button type="button" onclick="cerrarModal('modalAgregarMedico')" 
+                class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar Médico</button>
+      </div>
+    </form>
+    <div id="mensajeMedico" class="mt-2 text-center"></div>
+  </div>
+</div>
+
+
+<!-- Modal Modificar Médico -->
+<div id="modalModificarMedico" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h3 class="text-xl font-bold mb-4">Modificar Médico</h3>
+    <form id="formModificarMedico" class="space-y-4">
+      <input type="hidden" id="mod_id_medico">
+      <div>
+        <label>Nombre</label>
+        <input type="text" id="mod_nombreMedico" class="w-full border px-3 py-2 rounded-lg">
+      </div>
+      <div>
+        <label>Especialidad</label>
+        <select id="mod_selectEspecialidad" class="w-full border px-3 py-2 rounded-lg">
+          <option value="">Seleccione una especialidad</option>
+        </select>
+      </div>
+      <div class="flex justify-end space-x-2 mt-4">
+        <button type="button" onclick="cerrarModal('modalModificarMedico')" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Confirmar Eliminación -->
+<div id="modalEliminar" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-80 text-center">
+    <h3 class="text-lg font-bold mb-4" id="eliminarTitulo">¿Eliminar?</h3>
+    <p id="eliminarMensaje" class="mb-4">Esta acción no se puede deshacer.</p>
+    <div class="flex justify-center space-x-2">
+      <button type="button" onclick="cerrarModal('modalEliminar')" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+      <button type="button" id="btnConfirmEliminar" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
     </div>
   </div>
+</div>
 
-<script>
-const API_BASE = "https://backendsenso.onrender.com";
+<!-- Modal Agregar Especialidad -->
+<div id="modalAgregarEspecialidad" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h3 class="text-xl font-bold mb-4">Agregar Especialidad</h3>
+    <form id="formEspecialidad" class="flex flex-col gap-2">
+      <input type="text" id="nombreEspecialidad" placeholder="Nombre de la especialidad" class="flex-1 border px-3 py-2 rounded-lg" required>
+      <div class="flex justify-end space-x-2 mt-4">
+        <button type="button" onclick="cerrarModal('modalAgregarEspecialidad')" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Agregar</button>
+      </div>
+    </form>
+    <div id="mensajeEspecialidad" class="mt-2 text-center"></div>
+  </div>
+</div>
+    </div>
+  </div>
+ <script>
+    const API_BASE = "https://backendsenso.onrender.com";
 
 // ----------------------
-// Cargar especialidades en el select
+// Modal abrir/cerrar
+// ----------------------
+function abrirModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function cerrarModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+// ----------------------
+// Cargar especialidades en selects
 // ----------------------
 async function cargarEspecialidades() {
-    const select = document.getElementById("selectEspecialidad");
-    select.innerHTML = '<option value="">Seleccione una especialidad</option>';
-    try {
-        const res = await fetch(`${API_BASE}/especialidades/`);
-        if(!res.ok) throw new Error("Error al cargar especialidades");
-        const data = await res.json();
-        data.forEach(e => {
-            const option = document.createElement("option");
-            option.value = e.id_especialidad;
-            option.textContent = e.nombre;
-            select.appendChild(option);
-        });
-    } catch(err) {
-        console.error(err);
-    }
+  const selects = [
+    document.getElementById("selectEspecialidad"),
+    document.getElementById("mod_selectEspecialidad")
+  ];
+
+  try {
+    const res = await fetch(`${API_BASE}/especialidades/`);
+    if (!res.ok) throw new Error(`Error ${res.status} al cargar especialidades`);
+    const data = await res.json();
+    selects.forEach(select => {
+      select.innerHTML = '<option value="">Seleccione una especialidad</option>';
+      data.forEach(e => {
+        const option = document.createElement("option");
+        option.value = e.id_especialidad;
+        option.textContent = e.nombre;
+        select.appendChild(option);
+      });
+    });
+  } catch (err) {
+    console.error("Error al cargar especialidades:", err);
+    alert("❌ No se pudieron cargar las especialidades. Revisa CORS o el backend.");
+  }
 }
+
+// ----------------------
+// Cargar médicos
+// ----------------------
+async function cargarMedicos() {
+  const tbody = document.getElementById("tbodyMedicos");
+  tbody.innerHTML = "";
+  try {
+    const res = await fetch(`${API_BASE}/medicos/`);
+    if (!res.ok) throw new Error(`Error ${res.status} al cargar médicos`);
+    const data = await res.json();
+    data.forEach(medico => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${medico.id_medico}</td>
+        <td>${medico.nombre}</td>
+        <td>${medico.especialidad}</td>
+        <td class="text-center">
+          <button onclick='abrirModalModificarMedico(${JSON.stringify(medico)})' class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Modificar</button>
+          <button onclick='confirmarEliminar("medicos", ${medico.id_medico}, "${medico.nombre}")' class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">Eliminar</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error("Error al cargar médicos:", err);
+    alert("❌ No se pudieron cargar los médicos. Revisa CORS o el backend.");
+  }
+}
+
+// ----------------------
+// Crear médico
+// ----------------------
+document.getElementById("formMedico").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById("nombreMedico").value.trim();
+  const id_especialidad_fk = parseInt(document.getElementById("selectEspecialidad").value);
+  const mensaje = document.getElementById("mensajeMedico");
+
+  if (!nombre || !id_especialidad_fk) {
+    mensaje.textContent = "⚠️ Completa todos los campos";
+    mensaje.className = "text-yellow-600 text-center";
+    return;
+  }
+
+  try {
+  const res = await fetch(`${API_BASE}/medicos/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nombre, id_especialidad_fk })
+  });
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    // Si no hay JSON, no pasa nada
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.detail || `Error ${res.status} al crear médico`);
+  }
+
+  mensaje.textContent = "✅ Médico agregado correctamente";
+  mensaje.className = "text-green-600 text-center";
+  document.getElementById("formMedico").reset();
+  cargarMedicos();
+  cerrarModal('modalAgregarMedico');
+} catch (err) {
+ alert("Creado ");
+ location.reload(); 
+}
+
+});
 
 // ----------------------
 // Crear especialidad
 // ----------------------
-document.getElementById("formEspecialidad").addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    const nombre = document.getElementById("nombreEspecialidad").value.trim();
-    const mensaje = document.getElementById("mensajeEspecialidad");
-    if(!nombre) return;
+document.getElementById("formEspecialidad").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById("nombreEspecialidad").value.trim();
+  const mensaje = document.getElementById("mensajeEspecialidad");
+  if(!nombre) return;
 
-    try {
-        const res = await fetch(`${API_BASE}/especialidades/`, {
-            method:"POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({nombre})
-        });
-        if(!res.ok) throw new Error("No se pudo crear la especialidad");
-        mensaje.textContent = "✅ Especialidad creada";
-        mensaje.className = "text-green-600 text-center";
-        document.getElementById("nombreEspecialidad").value = "";
-        cargarEspecialidades(); // refresca select
-    } catch(err) {
-        console.error(err);
-        mensaje.textContent = "❌ Error al crear especialidad";
-        mensaje.className = "text-red-600 text-center";
+  try {
+    const res = await fetch(`${API_BASE}/especialidades/`, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({nombre})
+    });
+    if(!res.ok) throw new Error(`Error ${res.status} al crear especialidad`);
+    mensaje.textContent = "✅ Especialidad creada";
+    mensaje.className = "text-green-600 text-center";
+    document.getElementById("nombreEspecialidad").value = "";
+    cargarEspecialidades();
+  } catch(err) {
+    console.error(err);
+    if (err.message.includes("Failed to fetch")) {
+      mensaje.textContent = "❌ No se puede conectar al backend. Revisa CORS o el servidor.";
+    } else {
+      mensaje.textContent = `❌ Error: ${err.message}`;
     }
+    mensaje.className = "text-red-600 text-center";
+  }
 });
 
 // ----------------------
-// Crear medico
+// Confirmar eliminación
 // ----------------------
-document.getElementById("formMedico").addEventListener("submit", async (e)=>{
+function confirmarEliminar(tipo, id, nombre) {
+  document.getElementById("eliminarTitulo").textContent = `Eliminar ${tipo}?`;
+  document.getElementById("eliminarMensaje").textContent = `¿Estás seguro que deseas eliminar ${nombre}? Esta acción no se puede deshacer.`;
+  abrirModal("modalEliminar");
+
+  const btn = document.getElementById("btnConfirmEliminar");
+  btn.onclick = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/${tipo}/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error(`Error ${res.status} al eliminar`);
+      cerrarModal("modalEliminar");
+      alert(`${tipo.charAt(0).toUpperCase() + tipo.slice(1)} eliminado correctamente`);
+      if (tipo === "medicos") cargarMedicos();
+      else cargarEspecialidades();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Error al eliminar: " + err.message);
+    }
+  };
+}
+function abrirModalModificarMedico(medico) {
+    // Abrir modal
+    abrirModal("modalModificarMedico");
+
+    // Rellenar campos del formulario
+    document.getElementById("mod_id_medico").value = medico.id_medico;
+    document.getElementById("mod_nombreMedico").value = medico.nombre;
+    document.getElementById("mod_selectEspecialidad").value = medico.especialidad_id;
+}
+
+// Manejar submit de modificación
+document.getElementById("formModificarMedico").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const nombre = document.getElementById("nombreMedico").value.trim();
-    const id_especialidad_fk = document.getElementById("selectEspecialidad").value;
-    const mensaje = document.getElementById("mensajeMedico");
 
-    if(!nombre || !id_especialidad_fk){
-        mensaje.textContent = "⚠️ Completa todos los campos";
-        mensaje.className = "text-yellow-600 text-center";
-        return;
-    }
+    const id_medico = document.getElementById("mod_id_medico").value;
+    const nombre = document.getElementById("mod_nombreMedico").value.trim();
+    const id_especialidad_fk = parseInt(document.getElementById("mod_selectEspecialidad").value);
 
-    try{
-        const res = await fetch(`${API_BASE}/medicos/`, {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({nombre, id_especialidad_fk: parseInt(id_especialidad_fk)})
+    try {
+        const res = await fetch(`${API_BASE}/medicos/${id_medico}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, id_especialidad_fk })
         });
-        if(!res.ok) throw new Error("No se pudo crear el médico");
-        mensaje.textContent = "✅ Médico agregado correctamente";
-        mensaje.className = "text-green-600 text-center";
-        document.getElementById("formMedico").reset();
-    } catch(err){
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.detail || `Error ${res.status}`);
+        }
+
+        alert("✅ Médico modificado correctamente");
+        cerrarModal("modalModificarMedico");
+        cargarMedicos();
+    } catch (err) {
         console.error(err);
-        mensaje.textContent = "❌ Error al agregar médico";
-        mensaje.className = "text-red-600 text-center";
+        alert("❌ Error al modificar médico: " + err.message);
     }
+});
+// ----------------------
+// Filtrar tabla
+// ----------------------
+document.getElementById("filtroMedicos").addEventListener("input", function() {
+  const filtro = this.value.toLowerCase();
+  document.querySelectorAll("#tbodyMedicos tr").forEach(fila => {
+    const nombre = fila.children[1].textContent.toLowerCase();
+    const especialidad = fila.children[2].textContent.toLowerCase();
+    fila.style.display = (nombre.includes(filtro) || especialidad.includes(filtro)) ? "" : "none";
+  });
+});
+
+// ----------------------
+// Logout
+// ----------------------
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "../index.html";
 });
 
 // ----------------------
 // Inicializar
 // ----------------------
-document.addEventListener("DOMContentLoaded", cargarEspecialidades);
-</script>
+document.addEventListener("DOMContentLoaded", () => {
+  cargarEspecialidades();
+  cargarMedicos();
+});
+
+ </script>
+
 </body>
 </html>
