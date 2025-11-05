@@ -11,7 +11,7 @@
 
         <!-- Sección de imagen y título -->
         <div class="flex flex-col items-center mb-6">
-            <img src="/img/logo.jpg" alt="Logo Centro Médico" class="mb-4 w-32 h-32 object-contain">
+            <img src="./img/logo.jpg" alt="Logo Centro Médico" class="mb-4 w-32 h-32 object-contain">
             <h1 class="text-xl font-bold text-center text-red-600">
                 CENSO DE PACIENTES <br> AMBULATORIOS/HOSPITALARIOS
             </h1>
@@ -36,9 +36,9 @@
     <script>
         // Datos simulados
         const users = [
-            { username: "admin", password: "passadmin#2025", role: "Administrador" },
+            { username: "admin", password: "adminV#2025", role: "Administrador" },
             { username: "user", password: "passuser", role: "Invitado" },
-            { username: "caja", password: "caja#2025", role: "Empleado" }
+            { username: "censo", password: "censo#2025", role: "Empleado" }
         ];
 
         document.getElementById("loginForm").addEventListener("submit", function(e) {
@@ -60,7 +60,7 @@
                 message.className = "mt-4 text-center text-green-500";
 
                 setTimeout(() => {
-                   window.location.href = "/pages/home.html";
+                   window.location.href = "./pages/home.html";
                 }, 1000);
             } else {
                 message.textContent = "Usuario o contraseña incorrectos.";
