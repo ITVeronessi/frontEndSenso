@@ -268,11 +268,11 @@
       data.forEach(m => {
         tbody.innerHTML += `
           <tr>
-            <td class="px-4 py-2">${m.id_medico}</td>
+            <td class="px-4 py-2">${m.id_medicos}</td>
             <td class="px-4 py-2">${m.nombre}</td>
             <td class="px-4 py-2">${m.especialidad}</td>
             <td class="px-4 py-2 text-center">
-              <button onclick="abrirModal(${m.id_medico}, '${m.nombre}', '${m.especialidad}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Agregar Paciente</button>
+              <button onclick="abrirModal(${m.id_medicos}, '${m.nombre}', '${m.especialidad}')" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Agregar Paciente</button>
             </td>
           </tr>
         `;
