@@ -307,40 +307,70 @@
     // ENVIAR PACIENTE
     // -----------------------------
     document.getElementById("formPaciente").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(this));
-      const payload = {
-        id_paciente: formData.id_paciente,
-        nombrepaciente: formData.nombrepaciente,
-        apellidopaciente: formData.apellidopaciente,
-        edad: parseInt(formData.edad),
-        idgenero_fk: parseInt(formData.idgenero_fk),
-        fechaingreso: formData.fechaingreso,
-        diagnosticopaciente: formData.diagnosticopaciente,
-        idmedicos_fk: parseInt(formData.idmedicos_fk),
-        especialidad: formData.especialidad,
-        aseguradora: formData.aseguradora
-      };
-      try {
-        const res = await fetch(`${API_BASE}/senso/`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(payload)
-        });
-        if(res.ok){
-          alert("✅ Paciente agregado correctamente");
-          cerrarModalPaciente();
-          cargarSenso();
-        } else {
-          const error = await res.json();
-          console.error(error);
-          alert("⚠ Error al agregar paciente");
-        }
-      } catch(err) {
-        console.error(err);
-        alert("❌ Error de conexión con la API");
-      }
+  e.preventDefault();
+
+  const formData = Object.fromEntries(new FormData(this));
+
+  // Armar payload seguro
+  const payload = {
+    id_paciente: formData.id_paciente || "",
+    nombrepaciente: formData.nombrepaciente || "",
+    apellidopaciente: formData.apellidopaciente || "",
+    edad: formData.edad ? parseInt(formData.edad) : 0,
+    idgenero_fk: formData.idgenero_fk ? parseInt(formData.idgenero_fk) : null,
+    fechaingreso: formData.fechaingreso || null,
+    diagnosticopaciente: formData.diagnosticopaciente || "",
+    idmedicos_fk: formData.idmedicos_fk ? parseInt(formData.idmedicos_fk) : null,
+    especialidad: formData.especialidad || "",
+    aseguradora: formData.aseguradora || "",
+    diasInstancia: formData.diasInstancia ? parseInt(formData.diasInstancia) : 0,
+    fechaalta: formData.fechaalta || null // se puede actualizar después
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/senso/`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
     });
+
+    if(res.ok){
+      alert("✅ Paciente agregado correctamente");
+      cerrarModalPaciente();
+      cargarSenso();
+    } else {
+      const error = await res.json();
+      console.error(error);
+      alert("⚠ Error al agregar paciente: " + JSON.stringify(error.detail));
+    }
+  } catch(err) {
+    console.error(err);
+    alert("❌ Error de conexión con la API");
+  }
+});
+
+//eliminar senso
+// -----------------------------
+// ELIMINAR PACIENTE
+// -----------------------------
+async function eliminarSenso(idsenso) {
+  const confirmar = confirm("¿Seguro que deseas eliminar este paciente?");
+  if (!confirmar) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/senso/${idsenso}`, {
+      method: "DELETE"
+    });
+
+    if (!res.ok) throw new Error("No se pudo eliminar el paciente");
+
+    alert("Paciente eliminado correctamente ✅");
+    cargarSenso(); // refresca la tabla
+  } catch (err) {
+    console.error(err);
+    alert("Error al eliminar el paciente ⚠️");
+  }
+}
 
     // -----------------------------
     // CARGAR PACIENTES
